@@ -84,8 +84,9 @@ jobs:
           name: frontend-test
           command: |
             cd frontend
-            #npm install
-            #npm build
+            npm install
+            npm install oauth-sign
+            npm build
             npm run test
 
                 
@@ -100,8 +101,8 @@ jobs:
           name: backend-test
           command: |
             cd backend
-            #npm install
-            #npm build
+            npm install
+            npm build
             npm run test
             
 #  scan-frontend:
