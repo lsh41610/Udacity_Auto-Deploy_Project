@@ -40,10 +40,10 @@ jobs:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - run:
-          name: fail_step
-          command: |
-            return 1
+#      - run: # for notify test
+#          name: fail_step
+#          command: |
+#            return 1
       - slack/notify:
           channel: C020NMZA3R9
           custom: |
@@ -73,39 +73,6 @@ jobs:
               ]
             }
           event: fail
-  notify-allpass:
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
-      - slack/notify:
-          channel: C020NMZA3R9
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                      "type": "mrkdwn",
-                      "text": "*Success* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}`",
-                      "emoji": true
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Job"
-                      },
-                      "url": "${CIRCLE_BUILD_URL}"
-                    }
-                  ]  
-                }             
-              ]
-            }
-          event: always
 
   build-frontend:
     docker:
@@ -416,4 +383,3 @@ workflows:
   send-notification:
     jobs:
       - notify
-#      - notify-allpass
