@@ -40,10 +40,10 @@ jobs:
     docker:
       - image: 'cimg/base:stable'
     steps:
-#      - run:
-#          name: fail_step
-#          command: |
-#            return 1
+      - run:
+          name: fail_step
+          command: |
+            return 1
       - slack/notify:
           channel: C020NMZA3R9
           custom: |
@@ -61,7 +61,7 @@ jobs:
                 } 
               ]
             }
-          event: always
+          event: fail #always
 
   build-frontend:
     docker:
