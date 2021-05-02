@@ -371,4 +371,4 @@ workflows:
 #          requires: [cloudfront-update]
   send-notification:
     jobs:
-      - notify:
+      - notify
