@@ -51,17 +51,71 @@ jobs:
               "blocks": [
                 {
                   "type": "section",
-                  "fields": [
+                  "text": {
                     {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
+                      "type": "mrkdwn",
+                      "text": "*Failure* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}`",
                       "emoji": true
                     }
-                  ]
-                } 
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "emoji": true
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]  
+                }             
               ]
             }
-          event: fail #always
+          event: fail
+  notify-allpass:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - run:
+          name: fail_step
+          command: |
+            return 1
+      - slack/notify:
+          channel: C020NMZA3R9
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Success* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}`",
+                      "emoji": true
+                    }
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "emoji": true
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]  
+                }             
+              ]
+            }
+          event: always
 
   build-frontend:
     docker:
@@ -262,7 +316,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
                     
 #  deploy-backend:
-#    docker:
+#    docker:th
       # Docker image here that supports Ansible
 #    steps:
       # Checkout code from git
@@ -372,3 +426,4 @@ workflows:
   send-notification:
     jobs:
       - notify
+      - notify-allpass
