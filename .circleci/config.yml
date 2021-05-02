@@ -52,11 +52,9 @@ jobs:
                 {
                   "type": "section",
                   "text": {
-                    {
                       "type": "mrkdwn",
                       "text": "*Failure* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}`",
                       "emoji": true
-                    }
                   }
                 },
                 {
@@ -68,7 +66,6 @@ jobs:
                         "type": "plain_text",
                         "text": "View Job"
                       },
-                      "emoji": true
                       "url": "${CIRCLE_BUILD_URL}"
                     }
                   ]  
@@ -80,10 +77,6 @@ jobs:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - run:
-          name: fail_step
-          command: |
-            return 1
       - slack/notify:
           channel: C020NMZA3R9
           custom: |
@@ -92,11 +85,9 @@ jobs:
                 {
                   "type": "section",
                   "text": {
-                    {
                       "type": "mrkdwn",
                       "text": "*Success* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}`",
                       "emoji": true
-                    }
                   }
                 },
                 {
@@ -108,7 +99,6 @@ jobs:
                         "type": "plain_text",
                         "text": "View Job"
                       },
-                      "emoji": true
                       "url": "${CIRCLE_BUILD_URL}"
                     }
                   ]  
