@@ -36,43 +36,6 @@ orbs:
  #           fi
             
 jobs:
-  notify:
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
-#      - run: # for notify test
-#          name: fail_step
-#          command: |
-#            return 1
-      - slack/notify:
-          channel: C020NMZA3R9
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                      "type": "mrkdwn",
-                      "text": "*Failure* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}`"
-                    }
-                },  
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Job",
-                        "emoji": true
-                      },
-                      "url": "${CIRCLE_BUILD_URL}"
-                    }
-                  ]  
-                }             
-              ]
-            }
-          event: fail
 
   build-frontend:
     docker:
@@ -100,7 +63,7 @@ jobs:
       - slack/notify:
           channel: C020NMZA3R9
           event: pass
-          template: success_tagged_deploy_1
+          template: basic_success_1
 
   build-backend:
     docker:
@@ -121,6 +84,15 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
 
   test-frontend:
     docker:
@@ -137,6 +109,15 @@ jobs:
             npm install oauth-sign
             npm build
             npm run test
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
 
                 
   test-backend:
@@ -153,7 +134,16 @@ jobs:
             npm install
             npm build
             npm run test
-            
+       - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
+           
   scan-frontend:
     docker:
       # Docker image here
@@ -170,6 +160,15 @@ jobs:
           command: |
             cd frontend
             npm audit fix --audit-level=critical --force
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
 
   scan-backend:
     docker:
@@ -187,6 +186,14 @@ jobs:
           command: |
             cd backend
             npm audit fix --audit-level=critical --force
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
 
 
   deploy-infrastructure:
@@ -237,6 +244,15 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
+      
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
 
 #  configure-infrastructure:
 #    docker:
