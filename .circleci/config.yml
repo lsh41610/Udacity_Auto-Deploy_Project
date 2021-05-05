@@ -72,7 +72,7 @@ jobs:
                 }             
               ]
             }
-          event: always #fail
+          event: fail
 
   build-frontend:
     docker:
