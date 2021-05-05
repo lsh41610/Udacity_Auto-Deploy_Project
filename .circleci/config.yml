@@ -72,7 +72,7 @@ jobs:
                 }             
               ]
             }
-          event: fail
+          event: always #fail
 
   build-frontend:
     docker:
@@ -395,6 +395,6 @@ workflows:
 #          requires: [smoke-test]
 #      - cleanup:
 #          requires: [cloudfront-update]
-  send-notification:
-    jobs:
+#  send-notification:
+#    jobs:
       - notify
