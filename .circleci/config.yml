@@ -204,6 +204,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - jq/install
       - run:
           name: Ensure back-end infrastructure exists
           command: |
