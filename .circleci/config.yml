@@ -134,7 +134,7 @@ jobs:
             npm install
             npm build
             npm run test
-       - slack/notify:
+      - slack/notify:
           channel: C020NMZA3R9
           event: fail
           template: basic_fail_1
