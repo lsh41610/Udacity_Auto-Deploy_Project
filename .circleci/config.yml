@@ -17,7 +17,6 @@ commands:
             # Your code here
             aws cloudformation delete-stack --stack-name "backend-${CIRCLE_WORKFLOW_ID:0:5}"
             aws cloudformation delete-stack --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:5}"
-            exit 1
 
 #  revert-migrations:
 #    description: Revert the last migration if successfully run in the current workflow.
@@ -236,7 +235,7 @@ jobs:
       - run:
          name: Install Dependencies
          command: |
-           yum -y install tar
+           yum -y install tar gzip
       - persist_to_workspace:
           root: ~/
           paths:
