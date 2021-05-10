@@ -237,9 +237,9 @@ jobs:
          command: |
            yum -y install tar gzip
       - persist_to_workspace:
-          root: ansible
+          root: .circleci/ansible
           paths:
-            - .circleci/ansible/inventory.txt
+            - inventory.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - slack/notify:
