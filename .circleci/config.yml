@@ -279,7 +279,6 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i /tmp/ansible/inverntory.txt .circleci/ansible/configure-server.yml
-            exit 1
       # Here's where you will add some code to rollback on failure      
 
 #  run-migrations:
