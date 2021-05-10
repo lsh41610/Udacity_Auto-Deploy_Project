@@ -275,7 +275,6 @@ jobs:
               awscli \
             && rm -rf /var/cache/apk/*
             apk add --update ansible
-            exit 1
       - run:
           name: Configure server
           command: |
