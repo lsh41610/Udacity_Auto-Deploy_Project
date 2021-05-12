@@ -28,14 +28,14 @@ commands:
           # Add when this will run
 #          command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
- #           SUCCESS = 1
- #           if(( $SUCCESS==1 )); 
- #           then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
- #             exit 1
- #           fi
+#            SUCCESS = 1
+#            if(( $SUCCESS==1 )); 
+#            then
+#              cd ~/project/backend
+#              npm install
+#              Add revert code here. You can find this in the Getting Started section.
+#              exit 1
+#            fi
             
 jobs:
 
@@ -229,7 +229,7 @@ jobs:
             echo "[web]" > .circleci/ansible/inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress'\
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:5}" \
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - run:
@@ -280,23 +280,60 @@ jobs:
           command: |
             ansible-playbook -i /tmp/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
 
-#  run-migrations:
-#    docker:
+
+  run-migrations:
+    docker:
       # Docker image here that supports NodeJS
-#    steps:
+      - image: circleci/node:13.8.0
+    steps:
       # Checkout code from git
-#      - run:
-#          name: Run migrations
-#          command: |
+      - checkout
+      - run:
+          name: Run migrations
+          command: |
             # Your code here
-#            exit 1
-#      - run:
-#          name: Send migration results to memstash
-#          command: |
+            cd backend
+            npm install
+            npn run build
+            touch migration.txt
+            npm run migrations >> migration.txt
+            cat migration.txt
+            exit 1
+      - run:
+          name: Send migration results to memstash
+          command: |
             # Your code here
-#            exit 1
+            if grep -q "has been excuted successfully." migration.txt
+            then
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
+            --request PUT \
+            --data "1" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
+            else
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
+            --request PUT \
+            --data "0" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
+            fi
+
+            exit 1
      # Here's where you will add some code to rollback on failure      
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
 
 #  deploy-frontend:
 #    docker:
@@ -415,8 +452,8 @@ workflows:
               only: [main]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-#      - run-migrations:
-#          requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
 #      - deploy-frontend:
 #          requires: [run-migrations]
 #      - deploy-backend:
