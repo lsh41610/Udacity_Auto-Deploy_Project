@@ -275,6 +275,7 @@ jobs:
               awscli \
             && rm -rf /var/cache/apk/*
             apk add --update ansible
+            apk add --update curl #for slack notify
       - run:
           name: Configure server
           command: |
