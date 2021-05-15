@@ -325,7 +325,6 @@ jobs:
             --data "0" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
             fi
 
-            exit 1
      # Here's where you will add some code to rollback on failure      
       - slack/notify:
           channel: C020NMZA3R9
@@ -337,24 +336,25 @@ jobs:
           template: basic_success_1
 
 
-#  deploy-frontend:
-#    docker:
+  deploy-frontend:
+    docker:
       # Docker image here that supports AWS CLI
-#    steps:
+      - image: amazon/awscli
+    steps:
       # Checkout code from git
-#      - run:
-#          name: Install dependencies
-#          command: |
+      - run:
+          name: Install dependencies
+          command: |
             # your code here
-#      - run:
-#          name: Get backend url
-#          command: |
+      - run:
+          name: Get backend url
+          command: |
             # your code here
-#            export API_URL="http://${BACKEND_IP}:3030"
-#            echo "${API_URL}"
-#      - run:
-#          name: Deploy frontend objects
-#          command: |
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Deploy frontend objects
+          command: |
             # your code here
       # Here's where you will add some code to rollback on failure      
                     
@@ -456,8 +456,8 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-#      - deploy-frontend:
-#          requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
 #      - deploy-backend:
 #          requires: [run-migrations]
 #      - smoke-test:
