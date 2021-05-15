@@ -342,22 +342,43 @@ jobs:
       - image: amazon/awscli
     steps:
       # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
             # your code here
+            yum -y install tar gzip
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
       - run:
           name: Get backend url
           command: |
             # your code here
+            BACKEND_IP=${curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
+              --request GET https:// api.memstash.io/values/IP)
             export API_URL="http://${BACKEND_IP}:3030"
+            echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
             echo "${API_URL}"
       - run:
           name: Deploy frontend objects
           command: |
             # your code here
+            npm install webpack-dev-server -g
+            cd frontend
+            npm install
+            npm run build
+            aws s3 cp ./dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:5} --recursive
       # Here's where you will add some code to rollback on failure      
-                    
+       - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
+                   
 #  deploy-backend:
 #    docker:th
       # Docker image here that supports Ansible
