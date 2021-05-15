@@ -305,7 +305,7 @@ jobs:
             # Your code here
             cd backend
             npm install
-            npn run build
+            npm run build
             touch migration.txt
             npm run migrations >> migration.txt
             cat migration.txt
