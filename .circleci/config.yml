@@ -309,7 +309,6 @@ jobs:
             touch migration.txt
             npm run migrations >> migration.txt
             cat migration.txt
-            exit 1
       - run:
           name: Send migration results to memstash
           command: |
