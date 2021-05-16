@@ -11,6 +11,10 @@ commands:
       # Add parameter here   
     steps:
       - run:
+          name: Install AWS CLI if not installed
+          when: on_fail
+
+      - run:
           name: Destroy environments
           when: on_fail
           command: |
@@ -424,11 +428,11 @@ jobs:
             # your code here
             apk add --update tar gzip curl
       - run:
-          name: Get backend url
+ i         name: Get backend url
           command: |
             # your code here
             BACNEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
-                       --request GET https://api.memstash.values/IP)
+                       --request GET https://api.memstash.io/values/IP)
             URL="http://$BACKEND_IP:3030/api/status"
       - run:
           name: Backend smoke test.
