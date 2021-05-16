@@ -342,6 +342,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - jq/install
       - run:
           name: Install dependencies
           command: |
@@ -353,7 +354,7 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            BACKEND_IP=${curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
+            BACKEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
               --request GET https:// api.memstash.io/values/IP)
             export API_URL="http://${BACKEND_IP}:3030"
             echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
