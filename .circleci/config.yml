@@ -371,7 +371,7 @@ jobs:
           command: |
             # your code here
             BACKEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
-              --request GET https:// api.memstash.io/values/IP)
+              --request GET https://api.memstash.io/values/IP)
             export API_URL="http://${BACKEND_IP}:3030"
             echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
             echo "${API_URL}"
@@ -440,19 +440,14 @@ jobs:
             # your code here
             apk add --update tar gzip curl
       - run:
-          name: Get backend url
+          name: Get backend url and backend smoketest
           command: |
             # your code here
             BACNEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
                        --request GET https://api.memstash.io/values/IP)
             URL="http://$BACKEND_IP:3030/api/status"
-      - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
             echo $URL
             curl $URL
-
       - run:
           name: Frontend smoke test.
           command: |
