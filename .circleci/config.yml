@@ -263,7 +263,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["37:7f:62:22:c4:a7:56:7b:d0:52:8d:5e:46:1e:bd:36"] 
       - attach_workspace:
-          at: /tmp/ansible
+          at: /tmp/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
@@ -280,7 +280,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ansible-playbook -i /tmp/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
       - slack/notify:
           channel: C020NMZA3R9
@@ -379,21 +379,36 @@ jobs:
           template: basic_success_1
 
                    
-#  deploy-backend:
-#    docker:th
+  deploy-backend:
+    docker:
       # Docker image here that supports Ansible
-#    steps:
+      - image: python:3.7-alpine3.11
+    steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
-#      - run:
-#          name: Install dependencies
-#          command: |
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["37:7f:62:22:c4:a7:56:7b:d0:52:8d:5e:46:1e:bd:36"]
+      - attach_workplace:
+          at: /tmp/circleci/ansible  
+      - run:
+          name: Install dependencies
+          command: |
             # your code here
-#      - run:
-#          name: Deploy backend
-#          command: |
+          apk add --update ansible
+          apk add --update tar gzip curl
+          apk add --update openssh-client
+      - run:
+          name: Compress Backend
+          command: |
+            tar -C backend -czvf artifact.tar.gz .
+            ls -la
+      - run:
+          name: Deploy backend
+          command: |
             # your code here
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
 
 #  smoke-test:
@@ -479,8 +494,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-#      - deploy-backend:
-#          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
 #      - smoke-test:
 #          requires: [deploy-backend, deploy-frontend]
 #      - cloudfront-update:
