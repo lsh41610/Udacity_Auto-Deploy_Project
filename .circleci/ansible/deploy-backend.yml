@@ -12,6 +12,8 @@
     - deploy
 
   environment:
+    ENVIRONMENT: "production"
+    TYPORM_PORT: "5432"
     TYPEORM_CONNECTION: "{{ lookup('env','TYPEORM_CONNECTION') }}"
     TYPEORM_HOST: "{{ lookup('env','TYPEORM_HOST') }}"
     TYPEORM_USERNAME: "{{ lookup('env','TYPEORM_USERNAME') }}"
