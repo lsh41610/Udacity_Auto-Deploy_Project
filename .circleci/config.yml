@@ -45,14 +45,16 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}"
-            SUCCESS = 1
+            SUCCESS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
+            --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5})
+            #SUCCESS = 1
+            echo "********** SUCCESS = $SUCCESS"
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
               npm install
-              Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              npm run migrations:revert              
+             # exit 1
             fi
             
 jobs:
@@ -264,6 +266,7 @@ jobs:
           paths:
             - inventory.txt
       # Here's where you will add some code to rollback on failure
+      - revert-migrations
       - destroy-environment
       - slack/notify:
           channel: C020NMZA3R9
@@ -316,6 +319,8 @@ jobs:
 
             ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
+      - revert-migrations
+      - destroy-environment
       - slack/notify:
           channel: C020NMZA3R9
           event: fail
@@ -363,6 +368,8 @@ jobs:
             fi
 
      # Here's where you will add some code to rollback on failure      
+      - revert-migrations
+      - destroy-environment
       - slack/notify:
           channel: C020NMZA3R9
           event: fail
@@ -407,6 +414,8 @@ jobs:
             npm run build
             aws s3 cp ./dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:5} --recursive
       # Here's where you will add some code to rollback on failure      
+      - revert-migrations
+      - destroy-environment     
       - slack/notify:
           channel: C020NMZA3R9
           event: fail
@@ -449,6 +458,17 @@ jobs:
             cat /tmp/.circleci/ansible/inventory.txt
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
+      - revert-migrations
+      - destroy-environment
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
 
   smoke-test:
     docker:
@@ -483,6 +503,17 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure  
+      - revert-migrations
+      - destroy-environment
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C020NMZA3R9
+          event: pass
+          template: basic_success_1
+
 
 #  cloudfront-update:
 #    docker:
