@@ -485,6 +485,9 @@ jobs:
           command: |
             # your code here
             apk add --update tar gzip curl
+            apk add --update curl #for slack notify
+            apk add --update jq #for slack notify
+
       - run:
           name: Get backend url and backend smoketest
           command: |
