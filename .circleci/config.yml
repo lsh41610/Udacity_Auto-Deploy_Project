@@ -435,6 +435,7 @@ jobs:
       # Add ssh keys with fingerprint
       # attach workspace
       - checkout
+      - jq/install
       - add_ssh_keys:
           fingerprints: ["37:7f:62:22:c4:a7:56:7b:d0:52:8d:5e:46:1e:bd:36"]
       - attach_workspace:
