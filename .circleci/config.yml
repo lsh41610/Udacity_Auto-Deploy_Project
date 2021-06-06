@@ -545,13 +545,13 @@ jobs:
             echo OldWorkflowID: "$OldWorkflowID"
             echo STACKS: "$STACKS"
 
-           aws cloudformation update-stack \
-           --use-previous-template \
-           --stack-name cloudfront-stack \
-           --parameters ParameterKey=WorkflowID,ParameterValue=$CIRCLE_WORKFLOW_ID,UsePreviousValue=false 
-           curl -H "Content-Type: text/plain" -H "token: OLDWorkflowID-${CIRCLE_WORKFLOW_ID}" \
-           --request PUT \
-           --data "$OldWorkflowID" https://api.memstash.io/values/OldWorkflowID
+            aws cloudformation update-stack \
+            --use-previous-template \
+            --stack-name cloudfront-stack \
+            --parameters ParameterKey=WorkflowID,ParameterValue=$CIRCLE_WORKFLOW_ID,UsePreviousValue=false 
+            curl -H "Content-Type: text/plain" -H "token: OLDWorkflowID-${CIRCLE_WORKFLOW_ID}" \
+            --request PUT \
+            --data "$OldWorkflowID" https://api.memstash.io/values/OldWorkflowID
 
       # Here's where you will add some code to rollback on failure  
       - revert-migrations
