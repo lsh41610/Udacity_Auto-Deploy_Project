@@ -444,7 +444,7 @@ jobs:
           command: |
             # your code here
             apk add --update ansible
-            apk add --update tar gzip curl
+            apk add --update tar gzip nodejs npm
             apk add --update openssh-client
             apk add --update curl #for slack notify
             apk add --update jq #for slack notify
