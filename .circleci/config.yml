@@ -496,6 +496,7 @@ jobs:
                        --request GET https://api.memstash.io/values/IP)
             URL="http://$BACKEND_IP:3030/api/status"
             echo $URL
+            telnet $BACKEND_IP 3030
             curl $URL
       - run:
           name: Frontend smoke test
