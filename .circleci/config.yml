@@ -487,6 +487,7 @@ jobs:
             apk add --update tar gzip curl
             apk add --update curl #for slack notify
             apk add --update jq #for slack notify
+            apk add --update busybox-extras #for test
 
       - run:
           name: Get backend url and backend smoketest
