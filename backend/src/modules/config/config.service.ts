@@ -119,3 +119,4 @@ export class ConfigService {
     return this.envConfig.AUTH0_AUDIENCE;
   }
 }
+BACKEND_PORT=3031
