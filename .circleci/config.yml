@@ -498,7 +498,6 @@ jobs:
             URL="http://$BACKEND_IP:3030/api/status"
             echo $URL
             telnet $BACKEND_IP 22
-            telnet $BACKEND_IP 3030
             curl $URL
       - run:
           name: Frontend smoke test
