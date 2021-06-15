@@ -497,7 +497,7 @@ jobs:
             # your code here
             BACKEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
                        --request GET https://api.memstash.io/values/IP)
-           # URL="http://$BACKEND_IP:3030/api/status"
+            #URL="http://$BACKEND_IP:3030/api/status"
             URL="http://$BACKEND_IP:3031/api/status"
             echo $URL
             telnet $BACKEND_IP 22
