@@ -500,7 +500,7 @@ jobs:
             #URL="http://$BACKEND_IP:3030/api/status"
             URL="http://$BACKEND_IP:3031/api/status"
             echo $URL
-            telnet $BACKEND_IP 22
+            telnet $BACKEND_IP 3031
             curl $URL
       - run:
           name: Frontend smoke test
