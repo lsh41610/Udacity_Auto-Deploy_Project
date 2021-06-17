@@ -316,7 +316,7 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
-
+            cat backend/.env
             ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
       - revert-migrations
@@ -350,6 +350,7 @@ jobs:
             npm install
             npm run build
             touch migration.txt
+            npm run migrations:revert
             npm run migrations >> migration.txt
             cat migration.txt
       - run:
@@ -401,10 +402,8 @@ jobs:
             # your code here
             BACKEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
               --request GET https://api.memstash.io/values/IP)
-            #export API_URL="http://${BACKEND_IP}:3030"
-            #echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
-            export API_URL="http://${BACKEND_IP}:3031"
-            echo API_URL="http://${BACKEND_IP}:3031" >> "frontend/.env"
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
             echo "${API_URL}"
       - run:
           name: Deploy frontend objects
@@ -497,10 +496,9 @@ jobs:
             # your code here
             BACKEND_IP=$(curl -H "token: IP-${CIRCLE_WORKFLOW_ID:0:5}" \
                        --request GET https://api.memstash.io/values/IP)
-            #URL="http://$BACKEND_IP:3030/api/status"
-            URL="http://$BACKEND_IP:3031/api/status"
+            URL="http://$BACKEND_IP:3030/api/status"
             echo $URL
-            telnet $BACKEND_IP 3031
+            telnet $BACKEND_IP 3030
             curl $URL
       - run:
           name: Frontend smoke test
