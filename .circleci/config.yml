@@ -338,10 +338,16 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - restore_cache:
-          keys: [backend-build]
-      - attach_workspace:
-          at: ~/
+      #- restore_cache:
+      #    keys: [backend-build]
+      #- attach_workspace:
+      #    at: ~/
+      - run:
+          name: awscli install
+          command: |
+            sudo apt-get -y -qq update
+            sudo pat-get -qq install awscli
+            sudo apt-get -y -qq install python3
       - run:
           name: Run migrations
           command: |
@@ -367,6 +373,13 @@ jobs:
             --request PUT \
             --data "0" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
             fi
+      - run:
+          name: Log on fail
+          when: on_fail
+          command: |
+            cat /home/circleci/.npm/_logs/*-debug.log
+            ls -la
+            cat backend/migration.txt
 
      # Here's where you will add some code to rollback on failure      
       - revert-migrations
