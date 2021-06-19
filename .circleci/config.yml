@@ -346,7 +346,7 @@ jobs:
           name: awscli install
           command: |
             sudo apt-get -y -qq update
-            sudo pat-get -qq install awscli
+            sudo apt-get -qq install awscli
             sudo apt-get -y -qq install python3
       - run:
           name: Run migrations
