@@ -48,5 +48,8 @@
     pm2 ls
 
 - name: Local port 3030 Test
+  become: true
   shell: |
-    curl 127.0.0.1:3030/api/status 
+    lsof -i -P -n | grep LISTEN
+  uri:
+    url: http://127.0.0.1:3030/api/status
