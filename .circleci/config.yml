@@ -357,7 +357,7 @@ jobs:
           name: Send migration results to memstash
           command: |
             # Your code here
-            if grep -q "has been excuted successfully." migration.txt
+            if grep -q "has been executed successfully." migration.txt
             then
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
             --request PUT \
