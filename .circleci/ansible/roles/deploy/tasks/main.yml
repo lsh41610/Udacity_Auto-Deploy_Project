@@ -47,11 +47,3 @@
     pm2 start npm --name backend -- start
     pm2 ls
 
-- name: Local running port check
-  become: true
-  shell: |
-    lsof -i -P -n | grep LISTEN
-
-- name: Local port 3030 Test
-  uri:
-    url: http://127.0.0.1:3030/api/status

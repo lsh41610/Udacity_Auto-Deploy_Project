@@ -502,7 +502,12 @@ jobs:
             apk add --update curl #for slack notify
             apk add --update jq #for slack notify
             apk add --update busybox-extras #for test
-
+            apk add --no-cache openssl #for wget
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
       - run:
           name: Get backend url and backend smoketest
           command: |
@@ -511,6 +516,8 @@ jobs:
                        --request GET https://api.memstash.io/values/IP)
             URL="http://$BACKEND_IP:3030/api/status"
             echo $URL
+            # wait for pm2
+            dockerize -wait $URL -timeout 1m
             curl $URL
       - run:
           name: Frontend smoke test
