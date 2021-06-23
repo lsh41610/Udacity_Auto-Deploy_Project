@@ -608,11 +608,11 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID:0:5}" ]]
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-            aws s3 rm "s3://udapeople-${OldWorkflowID:0:5}" --recursive
-            aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID:0:5}"
-            aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID:0:5}"
+            aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+            aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
+            aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
               # your code here
             fi
       - revert-migrations
