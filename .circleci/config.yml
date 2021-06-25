@@ -365,13 +365,13 @@ jobs:
             # Your code here
             if grep -q "has been executed successfully." migration.txt
             then
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
-            --request PUT \
-            --data "1" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
+              --request PUT \
+              --data "1" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
             else
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
-            --request PUT \
-            --data "0" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:5}" \
+              --request PUT \
+              --data "0" https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:5}
             fi
       - run:
           name: Log on fail
@@ -622,11 +622,10 @@ jobs:
           command: |
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-            echo OldWorkflowID: "$OldWorkflowID"
-            aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
-            aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
-            aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
-              # your code here
+              echo OldWorkflowID: "$OldWorkflowID"
+              aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
+              aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
             fi
       #- revert-migrations
       #- destroy-environment
