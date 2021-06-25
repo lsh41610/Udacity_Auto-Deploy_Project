@@ -601,7 +601,7 @@ jobs:
             yum -y install tar gzip jq
 
       - run:
-          name: Get old stack workflow id
+          name: Get old stack workflow id and remove old s3&stacks
           command: |
             # your code here
             export OldWorkflowID=$(aws cloudformation list-exports \
@@ -616,13 +616,8 @@ jobs:
             echo OldWorkflowID: "$OldWorkflowID"
             echo STACKS: "$STACKS"
 
-
-      - run:
-          name: Remove old stacks and files
-          command: |
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              echo OldWorkflowID: "$OldWorkflowID"
               aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
               aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
