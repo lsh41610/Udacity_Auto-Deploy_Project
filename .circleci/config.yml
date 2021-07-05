@@ -207,8 +207,6 @@ jobs:
           name: backend-scan
           command: |
             cd backend
-            npm install latest-version
-            npm update
             npm audit fix --audit-level=critical --force
       - slack/notify:
           channel: C020NMZA3R9
